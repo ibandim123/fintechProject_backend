@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model client {
+  id     Int                  @id @default(autoincrement())
+  wallet active_financement[]
+  name   String
+  email  String
+  status Boolean
+}
+
+model active_financement {
+  id              Int    @id @default(autoincrement())
+  clientId        Int
+  financial_asset String
+  value           Int
+
+  client client @relation(fields: [clientId], references: [id])
+}
