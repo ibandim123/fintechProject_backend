@@ -9,9 +9,9 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: fintech
-      MYSQL_USER: fintech_user
-      MYSQL_PASSWORD: fintech_pass
+      MYSQL_DATABASE: MYSQL_DATABASE
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
     volumes:
       - mysql_data:/var/lib/mysql
 

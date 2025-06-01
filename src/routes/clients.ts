@@ -15,11 +15,16 @@ export default async function (app: FastifyInstance) {
         throw "Não foi possível buscar os clientes.";
       }
 
-      return reply.code(200).send(response);
+      return reply.code(200).send({
+        message: "conexão com a base de dados ativa",
+        data: response,
+        code: 200,
+      });
     } catch (Exception: FastifyError | any) {
-      reply.status(500).send({
+      reply.code(500).send({
         error: "Erro ao buscar os clientes.",
         cause: Exception,
+        code: 500,
       });
     }
   });
@@ -39,7 +44,7 @@ export default async function (app: FastifyInstance) {
 
         return reply.code(200).send(response);
       } catch (Exception: FastifyError | any) {
-        reply.status(500).send({
+        reply.code(500).send({
           error: "Erro ao buscar os clientes.",
           cause: Exception,
         });
@@ -65,13 +70,15 @@ export default async function (app: FastifyInstance) {
           throw "Não foi possível cadastrar o cliente.";
         }
 
-        return reply.send(200).send({
+        return reply.code(200).send({
           message: "Cliente cadastrado com sucesso.",
           data: response,
+          code: 200,
         });
       } catch (Exception: FastifyError | any) {
-        reply.status(500).send({
+        reply.code(500).send({
           error: "Erro ao cadastrar clientes.",
+          code: 500,
           cause: Exception,
         });
       }
@@ -102,7 +109,7 @@ export default async function (app: FastifyInstance) {
           data: response,
         });
       } catch (Exception) {
-        reply.status(500).send({
+        reply.code(500).send({
           error: "Erro ao editar registro de cliente.",
           cause: Exception,
         });
@@ -120,17 +127,19 @@ export default async function (app: FastifyInstance) {
         });
 
         if (!response) {
-          throw "Não foi possível deletar o cliente.";
+          throw "Não foi possível deletar o cliente da nossa base de dados";
         }
 
         return reply.code(200).send({
           message: "Cliente deletado com sucesso.",
           data: response,
+          code: 200,
         });
       } catch (Exception) {
-        reply.status(500).send({
+        reply.code(500).send({
           error: "Erro ao deletar registro de cliente.",
           cause: Exception,
+          code: 500,
         });
       }
     }
