@@ -12,7 +12,7 @@ export default async function (app: FastifyInstance) {
       const response = await prisma.client.findMany();
 
       if (!response) {
-        throw "Não foi possível buscar os clientes.";
+        throw new Error("Não foi possível buscar os clientes.");
       }
 
       return reply.code(200).send({
@@ -39,7 +39,7 @@ export default async function (app: FastifyInstance) {
         });
 
         if (!response) {
-          throw `Não foi encontrado o registro do número ${id}`;
+          throw new Error(`Não foi encontrado o registro do número ${id}`);
         }
 
         return reply.code(200).send(response);
@@ -67,7 +67,7 @@ export default async function (app: FastifyInstance) {
         });
 
         if (!response) {
-          throw "Não foi possível cadastrar o cliente.";
+          throw new Error("Não foi possível cadastrar o cliente.");
         }
 
         return reply.code(200).send({
@@ -101,7 +101,7 @@ export default async function (app: FastifyInstance) {
         });
 
         if (!response) {
-          throw "Não foi possível editar o cliente.";
+          throw new Error("Não foi possível editar o cliente.");
         }
 
         return reply.code(200).send({
@@ -127,7 +127,9 @@ export default async function (app: FastifyInstance) {
         });
 
         if (!response) {
-          throw "Não foi possível deletar o cliente da nossa base de dados";
+          throw new Error(
+            "Não foi possível deletar o cliente da nossa base de dados"
+          );
         }
 
         return reply.code(200).send({

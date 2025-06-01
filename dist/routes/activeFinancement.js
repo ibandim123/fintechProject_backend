@@ -1,31 +1,71 @@
 import { prisma } from "../prismaClient.js";
 export default async function (app) {
-    app.get("/", async () => prisma.active_financement.findMany());
-    app.get("/:id", async (req) => {
-        const { id } = req.params;
-        return prisma.active_financement.findUnique({ where: { id: Number(id) } });
+    app.get("/", async (__, reply) => {
+        try {
+            const response = prisma.active_financement.findMany();
+            if (!response) {
+                throw new Error("Não foi possível buscar os ativos financeiros");
+            }
+            return reply.code(200).send({
+                message: "conexão com a base de dados ativa",
+                data: response,
+                code: 200,
+            });
+        }
+        catch (Exception) {
+            reply.code(500).send({
+                error: "Erro ao buscar os ativos financeiros.",
+                cause: Exception,
+                code: 500,
+            });
+        }
     });
-    app.post("/", async (req) => {
-        const { clientId, financial_asset, value } = req.body;
-        return prisma.active_financement.create({
-            data: {
-                clientId,
-                financial_asset,
-                value,
-            },
-        });
+    app.get("/:id", async (req, reply) => {
+        try {
+            const { id } = req.params;
+            const response = await prisma.active_financement.findUnique({
+                where: { id: Number(id) },
+            });
+            return reply.code(200).send({
+                message: "Usuário possui ativos financeiros",
+                data: response,
+                code: 200,
+            });
+        }
+        catch (Exception) {
+            reply.code(500).send({
+                error: "Erro ao buscar os ativos financeiros.",
+                cause: Exception,
+                code: 500,
+            });
+        }
     });
-    app.put("/:id", async (req) => {
-        const { id } = req.params;
-        const data = req.body;
-        return prisma.active_financement.update({
-            where: { id: Number(id) },
-            data,
-        });
+    // à fazer, as requisições do Financement não estão prontas ainda
+    /*
+    app.post("/", async (req: any) => {
+      const { clientId, financial_asset, value } = req.body as any;
+      return prisma.active_financement.create({
+        data: {
+          clientId,
+          financial_asset,
+          value,
+        },
+      });
     });
-    app.delete("/:id", async (req) => {
-        const { id } = req.params;
-        return prisma.active_financement.delete({ where: { id: Number(id) } });
+  
+    app.put("/:id", async (req: any) => {
+      const { id } = req.params as { id: string };
+      const data = req.body as any;
+      return prisma.active_financement.update({
+        where: { id: Number(id) },
+        data,
+      });
     });
+  
+    app.delete("/:id", async (req: any) => {
+      const { id } = req.params as { id: string };
+      return prisma.active_financement.delete({ where: { id: Number(id) } });
+    });
+    */
 }
 //# sourceMappingURL=activeFinancement.js.map
